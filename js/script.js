@@ -5,6 +5,8 @@ var pictureTemplate = document.querySelector('#picture-template')
 
 var uploadFormPreview = document.querySelector('.container');
 
+var linkPicture = pictureTemplate.querySelector('.picture');
+
 // var pictureElements = ['foto-1.jpg', 'foto-2.jpg', 'foto-3.jpg', 'foto-4.jpg'];
 
 
@@ -55,10 +57,12 @@ var pictureElements = [{
 ];
 
 
+
 // создаем функцию, в которую будем передавать значение из цикла
 var renderPicture = function(pictureElements) {
   // клонируем наш шаблон
   var pictureElement = pictureTemplate.cloneNode(true);
+
   // подменяем контент в setup-similar-label из объекта
   pictureElement.querySelector('img').src = 'img/' + pictureElements.url;
   pictureElement.querySelector('.picture-comments').textContent = pictureElements.comments.length;
@@ -72,50 +76,17 @@ var fragment = document.createDocumentFragment();
 // запускаем цикл
 for (var i = 0; i < pictureElements.length; i++) {
   // в fragment вставляем шаблоны
+  linkPicture.id = 'picture-' + i;
+
   fragment.appendChild(renderPicture(pictureElements[i]));
 };
 
 uploadFormPreview.appendChild(fragment);
 
+var pictureId = uploadFormPreview.querySelector('.picture');
+console.log(uploadFormPreview);
+console.log(pictureId);
+pictureId.addEventListener('click', function() {
+  galleryOverlay.classList.remove('hidden');
 
-
-
-
-var galleryOverlay = document.querySelector('.gallery-overlay');
-var galleryOverlayImage = galleryOverlay.querySelector('.gallery-overlay-image');
-
-var likesCount = galleryOverlay.querySelector('.likes-count');
-var commentsCount = galleryOverlay.querySelector('.comments-count');
-
-var galleryOverlayCommentsList = galleryOverlay.querySelector('.gallery-overlay-comments-list');
-var socialCommentText1 = document.querySelector('.social__comment').content;
-
-
-var renderGalleryOverlay = function(pictureElements) {
-  // клонируем наш шаблон
-  // подменяем контент в setup-similar-label из объекта
-  galleryOverlayImage.src = 'img/' + pictureElements.url;
-  likesCount.textContent = pictureElements.likes;
-  commentsCount.textContent = pictureElements.comments.length;
-  // подменяем style с заливкой в wizard-coat из объекта
-};
-
-
-var comments1 = pictureElements[4];
-var comments2 = comments1.comments;
-var len = comments2.length;
-
-var galleryOverlayCommentsText = function(pictureElements) {
-  var socialCommentElement = socialCommentText1.cloneNode(true);
-  socialCommentElement.querySelector('.social__text').textContent = comments1.comments; // возвращаем глобальную переменную
-
- return socialCommentElement;
-};
-
-var fragmentOverlay = document.createDocumentFragment();
-for (var i = 0; i < len; i++) {
-  fragmentOverlay.appendChild(galleryOverlayCommentsText(pictureElements[i]));
-};
-
-galleryOverlayCommentsList.appendChild(fragmentOverlay);
-renderGalleryOverlay(pictureElements[4]);
+});
