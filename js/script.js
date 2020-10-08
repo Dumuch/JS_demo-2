@@ -75,7 +75,7 @@ var galleryOverlay = document.querySelector('.gallery-overlay');
 // список для комментарий
 var galleryOverlayCommentsList = galleryOverlay.querySelector('.gallery-overlay-comments-list');
 // шаблон вывода комментарий
-var socialCommentText1 = document.querySelector('.social__comment').content;
+var socialCommentText1 = document.querySelector('#social__comment-template').content;
 
 
 // функция создания полного изображения
@@ -142,4 +142,10 @@ for (var i = 0; i < pictureId.length; i++) {
 var galleryOverlayClose = galleryOverlay.querySelector('.gallery-overlay-close');
 galleryOverlayClose.addEventListener('click', function() {
   galleryOverlay.classList.add('hidden');
+  // находим все li, которые создали
+  var liList = galleryOverlayCommentsList.querySelectorAll('.social__comment');
+  // перебираем каждый элемент и удаляем его
+  for(var i=0; i< liList.length; i++) {
+    liList[i].remove();
+  };
 });
