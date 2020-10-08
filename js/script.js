@@ -142,10 +142,16 @@ for (var i = 0; i < pictureId.length; i++) {
 var galleryOverlayClose = galleryOverlay.querySelector('.gallery-overlay-close');
 galleryOverlayClose.addEventListener('click', function() {
   galleryOverlay.classList.add('hidden');
-  // находим все li, которые создали
-  var liList = galleryOverlayCommentsList.querySelectorAll('.social__comment');
-  // перебираем каждый элемент и удаляем его
-  for(var i=0; i< liList.length; i++) {
-    liList[i].remove();
+
+// второй способ удаления
+   while (galleryOverlayCommentsList.firstChild) {
+      galleryOverlayCommentsList.removeChild(galleryOverlayCommentsList.firstChild);
   };
+
+  // находим все li, которые создали
+  // var liList = galleryOverlayCommentsList.querySelectorAll('.social__comment');
+  // // перебираем каждый элемент и удаляем его
+  // for(var i=0; i< liList.length; i++) {
+  //   liList[i].remove();
+  // };
 });
