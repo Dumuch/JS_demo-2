@@ -143,9 +143,9 @@ var galleryOverlayClose = galleryOverlay.querySelector('.gallery-overlay-close')
 galleryOverlayClose.addEventListener('click', function() {
   galleryOverlay.classList.add('hidden');
 
-// второй способ удаления
-   while (galleryOverlayCommentsList.firstChild) {
-      galleryOverlayCommentsList.removeChild(galleryOverlayCommentsList.firstChild);
+  // второй способ удаления
+  while (galleryOverlayCommentsList.firstChild) {
+    galleryOverlayCommentsList.removeChild(galleryOverlayCommentsList.firstChild);
   };
 
   // находим все li, которые создали
@@ -155,3 +155,47 @@ galleryOverlayClose.addEventListener('click', function() {
   //   liList[i].remove();
   // };
 });
+
+
+var uploadOverlay = document.querySelector('.upload-overlay');
+var uploadFormCancel = uploadOverlay.querySelector('.upload-form-cancel');
+
+var closePopup = function() {
+  uploadOverlay.classList.add('hidden');
+};
+
+var openPopup = function() {
+  uploadOverlay.classList.remove('hidden');
+};
+
+uploadFormCancel.addEventListener('click', function() {
+  closePopup();
+  effectImagePreview.classList = 'effect-image-preview';
+});
+
+var uploadFile = document.querySelector('#upload-file');
+
+uploadFile.addEventListener('change', function() {
+  openPopup();
+});
+
+
+
+var uploadFormPreview = document.querySelector('.upload-form-preview');
+var effectImagePreview = document.querySelector('.effect-image-preview');
+
+
+var uploadEffect = function(evt){
+    var effectLabel = evt.currentTarget.value;
+
+    effectImagePreview.classList = 'effect-image-preview';
+    effectImagePreview.classList.add('effect-'+ effectLabel);
+};
+
+var uploadEffectControls = document.querySelector('.upload-effect-controls');
+
+var inputEffect = uploadEffectControls.querySelectorAll('input');
+// отлавливаем клик на любом изображении
+for (var i = 0; i < inputEffect.length; i++) {
+  inputEffect[i].addEventListener('click', uploadEffect);
+};
