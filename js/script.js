@@ -198,6 +198,8 @@ var filterFunction = function(max, filter, end){
   uploadEffectLevelPin.addEventListener("mouseup", function() {
     // расстояние от левого края начала блока
     var uploadEffectLevelPinLeft = getComputedStyle(uploadEffectLevelPin).left;
+    // получаем расстояние от левого края родительского блока
+    // и фильтруем px
     uploadEffectLevelPinLeft = uploadEffectLevelPinLeft.split("px")[0];
 
     // находим значение для фильтра
