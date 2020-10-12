@@ -61,7 +61,7 @@ var fragment = document.createDocumentFragment();
 // цикл происходит столько раз, сколько объектов в массиве
 for (var i = 0; i < pictureElements.length; i++) {
   // добавляем к каждому изображению id
-  linkPicture.id = i;
+  linkPicture.id = 'picture-' + i;
   // в fragment вставляем шаблоны по порядку в конец
   fragment.appendChild(renderPicture(pictureElements[i]));
 };
@@ -96,6 +96,7 @@ var topTop = function(evt) {
   galleryOverlay.classList.remove('hidden');
   // находим id открытого изображения
   var pictureIdIndex = evt.currentTarget.id;
+  var pictureIdIndex = pictureIdIndex.split("-")[1];
   // переменная, которая содержит массив комментарий для каждого изображения
   var comments2 = pictureElements[pictureIdIndex].comments;
   // переменная, которая подсчитывает кол-во комментарий
@@ -178,21 +179,95 @@ var uploadFile = document.querySelector('#upload-file');
 uploadFile.addEventListener('change', function() {
   openPopup();
 });
-
-
+// дистанция от окна браузера до левого угла блока
+var distanceLeftToUploadEffectLevelLine = 385;
+// дистанция от окна браузера до правого угла блока
+var distanceRightToUploadEffectLevelLine = 858;
+// ширина блока
+var withUploadEffectLevelLine = distanceRightToUploadEffectLevelLine - distanceLeftToUploadEffectLevelLine;
+// стандарнтое число для пропорций
+var percentagesForProportion = 100;
 
 var uploadFormPreview = document.querySelector('.upload-form-preview');
 var effectImagePreview = document.querySelector('.effect-image-preview');
 
+var uploadEffectControls = document.querySelector('.upload-effect-controls');
+var uploadEffectLevelPin = uploadEffectControls.querySelector('.upload-effect-level-pin');
 
-var uploadEffect = function(evt){
-    var effectLabel = evt.currentTarget.value;
-
-    effectImagePreview.classList = 'effect-image-preview';
-    effectImagePreview.classList.add('effect-'+ effectLabel);
+// функция изменения фильтра
+// принимаем параметры
+var filterFunction = function(max, filter, end){
+  // создаем событие по mouseup
+  uploadEffectLevelPin.addEventListener("mouseup", function(evt) {
+    // находим координату мыши по x
+    var rect = evt.x;
+    // находим значение для фильтра
+    var effectVar = (max * (((rect - distanceLeftToUploadEffectLevelLine) * percentagesForProportion) / withUploadEffectLevelLine)) / percentagesForProportion;
+    // меняем фильтр
+    effectImagePreview.style.filter = filter + '(' + effectVar + end;
+  });
 };
 
-var uploadEffectControls = document.querySelector('.upload-effect-controls');
+// функция отмены отслеживания
+var filterFunctionNone = function(){
+  uploadEffectLevelPin.addEventListener("click", function() {
+    effectImagePreview.style.filter = 'none';
+  });
+};
+// запускаем функцию по изменению фильтров
+var uploadEffect = function(evt) {
+  // находим значение value
+  var effectLabel = evt.currentTarget.value;
+  // проверяем значение value с нужным фильтром
+  if (effectLabel == 'chrome') {
+// применяем исходный фильтр
+    effectImagePreview.style.filter = 'grayscale(1)';
+    // задаем значения для функции по изменению фильтра
+    var max = 1;
+    var filter = 'grayscale';
+    var end = ')';
+    // запуск функции изменения фильтра
+    filterFunction(max, filter, end);
+
+  } else if (effectLabel == 'sepia') {
+    effectImagePreview.style.filter = 'sepia(1)';
+
+    var max = 1;
+    var filter = 'sepia';
+    var end = ')';
+    filterFunction(max, filter, end);
+
+  } else if (effectLabel == 'marvin') {
+    effectImagePreview.style.filter = 'invert(100%)';
+
+    var max = 100;
+    var filter = 'invert';
+    var end = '%)';
+    filterFunction(max, filter, end);
+
+  } else if (effectLabel == 'phobos') {
+    effectImagePreview.style.filter = 'blur(5px)';
+
+    var max = 5;
+    var filter = 'blur';
+    var end = 'px)';
+    filterFunction(max, filter, end);
+
+  } else if (effectLabel == 'heat') {
+    effectImagePreview.style.filter = 'brightness(3)';
+
+    var max = 3;
+    var filter = 'brightness';
+    var end = ')';
+    filterFunction(max, filter, end);
+
+  } else {
+    effectImagePreview.style.filter = 'none';
+    filterFunctionNone();
+
+  }
+};
+
 
 var inputEffect = uploadEffectControls.querySelectorAll('input');
 // отлавливаем клик на любом изображении
