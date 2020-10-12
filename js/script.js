@@ -179,13 +179,10 @@ var uploadFile = document.querySelector('#upload-file');
 uploadFile.addEventListener('change', function() {
   openPopup();
 });
-// дистанция от окна браузера до левого угла блока
-var distanceLeftToUploadEffectLevelLine = 385;
-// дистанция от окна браузера до правого угла блока
-var distanceRightToUploadEffectLevelLine = 858;
+
 // ширина блока
-var withUploadEffectLevelLine = distanceRightToUploadEffectLevelLine - distanceLeftToUploadEffectLevelLine;
-// стандарнтое число для пропорций
+var widthUploadEffectLevelLine =  495;
+// стандартное число для пропорций
 var percentagesForProportion = 100;
 
 var uploadFormPreview = document.querySelector('.upload-form-preview');
@@ -198,11 +195,14 @@ var uploadEffectLevelPin = uploadEffectControls.querySelector('.upload-effect-le
 // принимаем параметры
 var filterFunction = function(max, filter, end){
   // создаем событие по mouseup
-  uploadEffectLevelPin.addEventListener("mouseup", function(evt) {
-    // находим координату мыши по x
-    var rect = evt.x;
+  uploadEffectLevelPin.addEventListener("mouseup", function() {
+    // расстояние от левого края начала блока
+    var uploadEffectLevelPinLeft = getComputedStyle(uploadEffectLevelPin).left;
+    uploadEffectLevelPinLeft = uploadEffectLevelPinLeft.split("px")[0];
+
     // находим значение для фильтра
-    var effectVar = (max * (((rect - distanceLeftToUploadEffectLevelLine) * percentagesForProportion) / withUploadEffectLevelLine)) / percentagesForProportion;
+    var effectVar = ( uploadEffectLevelPinLeft * percentagesForProportion) / widthUploadEffectLevelLine;
+    effectVar = (max * effectVar) / percentagesForProportion
     // меняем фильтр
     effectImagePreview.style.filter = filter + '(' + effectVar + end;
   });
@@ -210,7 +210,7 @@ var filterFunction = function(max, filter, end){
 
 // функция отмены отслеживания
 var filterFunctionNone = function(){
-  uploadEffectLevelPin.addEventListener("click", function() {
+  uploadEffectLevelPin.addEventListener("mouseup", function() {
     effectImagePreview.style.filter = 'none';
   });
 };
