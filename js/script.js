@@ -202,7 +202,9 @@ var filterFunction = function(max, filter, end){
     // находим координату мыши по x
     var rect = evt.x;
     // находим значение для фильтра
-    var effectVar = (max * (((rect - distanceLeftToUploadEffectLevelLine) * percentagesForProportion) / withUploadEffectLevelLine)) / percentagesForProportion;
+    var effectVar = ((rect - distanceLeftToUploadEffectLevelLine) * percentagesForProportion) / withUploadEffectLevelLine;
+    effectVar = (max * effectVar) / percentagesForProportion;
+    console.log(effectVar);
     // меняем фильтр
     effectImagePreview.style.filter = filter + '(' + effectVar + end;
   });
@@ -211,6 +213,7 @@ var filterFunction = function(max, filter, end){
 // функция отмены отслеживания
 var filterFunctionNone = function(){
   uploadEffectLevelPin.addEventListener("click", function() {
+  uploadEffectLevelPin.addEventListener("mouseup", function() {
     effectImagePreview.style.filter = 'none';
   });
 };
