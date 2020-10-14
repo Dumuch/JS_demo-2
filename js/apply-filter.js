@@ -9,7 +9,7 @@
   });
 
   // ширина блока
-  var widthUploadEffectLevelLine =  495;
+  var widthUploadEffectLevelLine = 495;
   // стандартное число для пропорций
   var percentagesForProportion = 100;
 
@@ -21,81 +21,73 @@
   var uploadEffectLevelPin = uploadEffectControls.querySelector('.upload-effect-level-pin');
   var uploadEffectLevelVal = uploadEffectControls.querySelector('.upload-effect-level-val');
   var positionPin;
+
   var dragged = false;
 
- var onMouseDown = function(evt) {
+
+  var onMouseDown = function(evt) {
     dragged = true;
 
-  // отмена действий по умолчанию
-  evt.preventDefault();
-  // запоминаем начальные координаты курсора
-  var startCoords = {
-    x: evt.clientX
-  };
-
-  //  0 px 460px
-  // считываем координаты курсора
-  var onMouseMove = function(moveEvt) {
-    moveEvt.preventDefault();
-
-    // находим разницу между стартовыми координатами и текущим положением курсора
-    var shift = {
-      x: startCoords.x - moveEvt.clientX
+    // отмена действий по умолчанию
+    evt.preventDefault();
+    // запоминаем начальные координаты курсора
+    var startCoords = {
+      x: evt.clientX
     };
-    // перезаписываем объект с текущими координатами
-    startCoords = {
-      x: moveEvt.clientX
+
+    //  0 px 460px
+    // считываем координаты курсора
+    var onMouseMove = function(moveEvt) {
+      moveEvt.preventDefault();
+
+      // находим разницу между стартовыми координатами и текущим положением курсора
+      var shift = {
+        x: startCoords.x - moveEvt.clientX
+      };
+      // перезаписываем объект с текущими координатами
+      startCoords = {
+        x: moveEvt.clientX
+      };
+      // добавляем стили смещения к текущим значениям
+      positionPin = uploadEffectLevelPin.offsetLeft - shift.x;
+      if (positionPin >= 460) {
+        uploadEffectLevelPin.style.left = 460 + 'px';
+        uploadEffectLevelVal.style.width = 460 + 'px';
+      } else if (positionPin <= 0) {
+        uploadEffectLevelPin.style.left = 0 + 'px';
+        uploadEffectLevelVal.style.width = 0 + 'px';
+
+      } else {
+        uploadEffectLevelPin.style.left = positionPin + 'px';
+        uploadEffectLevelVal.style.width = positionPin + 'px';
+      }
     };
-    // добавляем стили смещения к текущим значениям
-     positionPin = uploadEffectLevelPin.offsetLeft - shift.x;
-    if (positionPin >= 460){
-      uploadEffectLevelPin.style.left = 460 + 'px';
-      uploadEffectLevelVal.style.width = 460 + 'px';
-    } else if (positionPin <= 0) {
-      uploadEffectLevelPin.style.left = 0 + 'px';
-      uploadEffectLevelVal.style.width = 0 + 'px';
 
-    } else {
-      uploadEffectLevelPin.style.left = positionPin + 'px';
-      uploadEffectLevelVal.style.width = positionPin + 'px';
+    var onMouseUp = function(upEvt) {
+      upEvt.preventDefault();
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+      dragged = false;
+    };
 
-    }
+    // обработчик завершения перетаскивания нужно вешать на документ
+    document.addEventListener('mousemove', onMouseMove);
+    // обработчик самого перетаскивания
+    document.addEventListener('mouseup', onMouseUp);
   };
-
-  var onMouseUp = function(upEvt) {
-    upEvt.preventDefault();
-    document.removeEventListener('mousemove', onMouseMove);
-    document.removeEventListener('mouseup', onMouseUp);
-
-  };
-
-  // обработчик завершения перетаскивания нужно вешать на документ
-  document.addEventListener('mousemove', onMouseMove);
-  // обработчик самого перетаскивания
-  document.addEventListener('mouseup', onMouseUp);
-};
-
-
-
 
   // функция изменения фильтра
   // принимаем параметры
-  var filterFunction = function(max, filter, end){
+  var filterFunction = function(max, filter, end) {
     uploadEffectLevelPin.style.left = 460 + 'px';
     uploadEffectLevelVal.style.width = 460 + 'px';
 
     uploadEffectLevelPin.addEventListener('mousedown', onMouseDown);
-    // создаем событие по mouseups
-    uploadEffectLevelPin.addEventListener("mousemove", function() {
-      // расстояние от левого края начала блока
-      // var uploadEffectLevelPinLeft = getComputedStyle(uploadEffectLevelPin).left;
-      // получаем расстояние от левого края родительского блока
-      // и фильтруем px
-      // uploadEffectLevelPinLeft = uploadEffectLevelPinLeft.split("px")[0];
-
+    // создаем событие по mousemove
+    document.addEventListener("mousemove", function() {
       // находим значение для фильтра
-      if(dragged){
-        var effectVar = ( positionPin * percentagesForProportion) / widthUploadEffectLevelLine;
+      if (dragged) {
+        var effectVar = (positionPin * percentagesForProportion) / widthUploadEffectLevelLine;
         effectVar = (max * effectVar) / percentagesForProportion;
         // меняем фильтр
         effectImagePreview.style.filter = filter + '(' + effectVar + end;
@@ -104,20 +96,18 @@
   };
 
   // функция отмены отслеживания
-  var filterFunctionNone = function(){
+  var filterFunctionNone = function() {
     uploadEffectLevelPin.style.left = 0 + 'px';
     uploadEffectLevelVal.style.width = 0 + 'px';
-    uploadEffectLevelPin.addEventListener("mouseup", function() {
-      effectImagePreview.style.filter = 'none';
-    });
   };
+
   // запускаем функцию по изменению фильтров
   var uploadEffect = function(evt) {
     // находим значение value
     var effectLabel = evt.currentTarget.value;
     // проверяем значение value с нужным фильтром
     if (effectLabel == 'chrome') {
-  // применяем исходный фильтр
+      // применяем исходный фильтр
       effectImagePreview.style.filter = 'grayscale(1)';
       // задаем значения для функции по изменению фильтра
       var max = 1;
