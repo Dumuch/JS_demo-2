@@ -24,6 +24,25 @@
 
   var dragged = false;
 
+var trackingPin = function(shift) {
+  if(dragged === false) {
+    positionPin = shift;
+  } else {
+    // добавляем стили смещения к текущим значениям
+    positionPin = uploadEffectLevelPin.offsetLeft - shift.x;
+  }
+    if (positionPin >= 460) {
+      uploadEffectLevelPin.style.left = 460 + 'px';
+      uploadEffectLevelVal.style.width = 460 + 'px';
+    } else if (positionPin <= 0) {
+      uploadEffectLevelPin.style.left = 0 + 'px';
+      uploadEffectLevelVal.style.width = 0 + 'px';
+
+    } else {
+      uploadEffectLevelPin.style.left = positionPin + 'px';
+      uploadEffectLevelVal.style.width = positionPin + 'px';
+    }
+  };
 
   var onMouseDown = function(evt) {
     dragged = true;
@@ -41,26 +60,15 @@
       moveEvt.preventDefault();
 
       // находим разницу между стартовыми координатами и текущим положением курсора
-      var shift = {
+       var shift = {
         x: startCoords.x - moveEvt.clientX
       };
       // перезаписываем объект с текущими координатами
       startCoords = {
         x: moveEvt.clientX
       };
-      // добавляем стили смещения к текущим значениям
-      positionPin = uploadEffectLevelPin.offsetLeft - shift.x;
-      if (positionPin >= 460) {
-        uploadEffectLevelPin.style.left = 460 + 'px';
-        uploadEffectLevelVal.style.width = 460 + 'px';
-      } else if (positionPin <= 0) {
-        uploadEffectLevelPin.style.left = 0 + 'px';
-        uploadEffectLevelVal.style.width = 0 + 'px';
 
-      } else {
-        uploadEffectLevelPin.style.left = positionPin + 'px';
-        uploadEffectLevelVal.style.width = positionPin + 'px';
-      }
+      trackingPin(shift);
     };
 
     var onMouseUp = function(upEvt) {
@@ -76,9 +84,24 @@
     document.addEventListener('mouseup', onMouseUp);
   };
 
+  var applyEffectVar = function (positionPin, max, filter, end) {
+    var effectVar = (positionPin * percentagesForProportion) / widthUploadEffectLevelLine;
+    effectVar = (max * effectVar) / percentagesForProportion;
+    // меняем фильтр
+    effectImagePreview.style.filter = filter + '(' + effectVar + end;
+  };
+
   // функция изменения фильтра
   // принимаем параметры
   var filterFunction = function(max, filter, end) {
+    uploadEffectLevel.removeEventListener('mousedown', filterFunctionNone);
+
+    uploadEffectLevel.addEventListener('mousedown', function(evt) {
+      positionPin = evt.clientX - 395;
+      trackingPin(positionPin);
+      applyEffectVar(positionPin, max, filter, end);
+    });
+
     uploadEffectLevelPin.style.left = 460 + 'px';
     uploadEffectLevelVal.style.width = 460 + 'px';
 
@@ -87,16 +110,19 @@
     document.addEventListener("mousemove", function() {
       // находим значение для фильтра
       if (dragged) {
-        var effectVar = (positionPin * percentagesForProportion) / widthUploadEffectLevelLine;
-        effectVar = (max * effectVar) / percentagesForProportion;
-        // меняем фильтр
-        effectImagePreview.style.filter = filter + '(' + effectVar + end;
+        applyEffectVar(positionPin, max, filter, end);
       };
     });
   };
 
   // функция отмены отслеживания
   var filterFunctionNone = function() {
+    uploadEffectLevelPin.style.left = 0 + 'px';
+    uploadEffectLevelVal.style.width = 0 + 'px';
+    effectImagePreview.style.filter = 'none';
+  };
+
+  var onMouseDownpositionPinNone = function() {
     uploadEffectLevelPin.style.left = 0 + 'px';
     uploadEffectLevelVal.style.width = 0 + 'px';
   };
@@ -152,6 +178,7 @@
       effectImagePreview.style.filter = 'none';
       filterFunctionNone();
       uploadEffectLevelPin.removeEventListener('mousedown', onMouseDown);
+      uploadEffectLevel.addEventListener('mousedown', filterFunctionNone);
     }
   };
 
