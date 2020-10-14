@@ -9,9 +9,11 @@
   });
 
   // ширина блока
-  var widthUploadEffectLevelLine = 495;
+  var widthUploadEffectLevelLine = 465;
   // стандартное число для пропорций
   var percentagesForProportion = 100;
+  var maxLeft = 460;
+  var minLeft = 0;
 
   var uploadFormPreview = document.querySelector('.upload-form-preview');
   var effectImagePreview = document.querySelector('.effect-image-preview');
@@ -31,12 +33,12 @@ var trackingPin = function(shift) {
     // добавляем стили смещения к текущим значениям
     positionPin = uploadEffectLevelPin.offsetLeft - shift.x;
   }
-    if (positionPin >= 460) {
-      uploadEffectLevelPin.style.left = 460 + 'px';
-      uploadEffectLevelVal.style.width = 460 + 'px';
-    } else if (positionPin <= 0) {
-      uploadEffectLevelPin.style.left = 0 + 'px';
-      uploadEffectLevelVal.style.width = 0 + 'px';
+    if (positionPin >= maxLeft) {
+      uploadEffectLevelPin.style.left = maxLeft + 'px';
+      uploadEffectLevelVal.style.width = maxLeft + 'px';
+    } else if (positionPin <= minLeft) {
+      uploadEffectLevelPin.style.left = minLeft + 'px';
+      uploadEffectLevelVal.style.width = minLeft + 'px';
 
     } else {
       uploadEffectLevelPin.style.left = positionPin + 'px';
@@ -102,8 +104,8 @@ var trackingPin = function(shift) {
       applyEffectVar(positionPin, max, filter, end);
     });
 
-    uploadEffectLevelPin.style.left = 460 + 'px';
-    uploadEffectLevelVal.style.width = 460 + 'px';
+    uploadEffectLevelPin.style.left = maxLeft + 'px';
+    uploadEffectLevelVal.style.width = maxLeft + 'px';
 
     uploadEffectLevelPin.addEventListener('mousedown', onMouseDown);
     // создаем событие по mousemove
@@ -117,14 +119,14 @@ var trackingPin = function(shift) {
 
   // функция отмены отслеживания
   var filterFunctionNone = function() {
-    uploadEffectLevelPin.style.left = 0 + 'px';
-    uploadEffectLevelVal.style.width = 0 + 'px';
+    uploadEffectLevelPin.style.left = minLeft + 'px';
+    uploadEffectLevelVal.style.width = minLeft + 'px';
     effectImagePreview.style.filter = 'none';
   };
 
   var onMouseDownpositionPinNone = function() {
-    uploadEffectLevelPin.style.left = 0 + 'px';
-    uploadEffectLevelVal.style.width = 0 + 'px';
+    uploadEffectLevelPin.style.left = minLeft + 'px';
+    uploadEffectLevelVal.style.width = minLeft + 'px';
   };
 
   // запускаем функцию по изменению фильтров
