@@ -3,7 +3,7 @@
 (function() {
   // ------------- применение фильтров --------------
   var uploadFile = document.querySelector('#upload-file');
-
+// открываем окно настройки фильтров при загрузке изображений
   uploadFile.addEventListener('change', function() {
     openPopup();
   });
@@ -12,7 +12,9 @@
   var widthUploadEffectLevelLine = 465;
   // стандартное число для пропорций
   var percentagesForProportion = 100;
+  // конечное значение для фильтра
   var maxLeft = 460;
+  // начальное значение для фильтра
   var minLeft = 0;
 
   var uploadFormPreview = document.querySelector('.upload-form-preview');
@@ -20,19 +22,23 @@
 
   var uploadEffectControls = document.querySelector('.upload-effect-controls');
   var uploadEffectLevel = document.querySelector('.upload-effect-level');
+  var uploadEffectLevelLine = uploadEffectLevel.querySelector('.upload-effect-level-line');
   var uploadEffectLevelPin = uploadEffectControls.querySelector('.upload-effect-level-pin');
   var uploadEffectLevelVal = uploadEffectControls.querySelector('.upload-effect-level-val');
   var positionPin;
-
   var dragged = false;
 
+// находим положение пина
 var trackingPin = function(shift) {
+  // если у нас не двигался пин и не вызывалась функция onMouseMove
+  // тогда мы заносим данные из другой функции
   if(dragged === false) {
     positionPin = shift;
   } else {
     // добавляем стили смещения к текущим значениям
     positionPin = uploadEffectLevelPin.offsetLeft - shift.x;
   }
+  // устанавливаем рамки, в которых мы можем двигать pin
     if (positionPin >= maxLeft) {
       uploadEffectLevelPin.style.left = maxLeft + 'px';
       uploadEffectLevelVal.style.width = maxLeft + 'px';
@@ -45,7 +51,7 @@ var trackingPin = function(shift) {
       uploadEffectLevelVal.style.width = positionPin + 'px';
     }
   };
-
+// функция при клике на мышь
   var onMouseDown = function(evt) {
     dragged = true;
 
@@ -55,8 +61,6 @@ var trackingPin = function(shift) {
     var startCoords = {
       x: evt.clientX
     };
-
-    //  0 px 460px
     // считываем координаты курсора
     var onMouseMove = function(moveEvt) {
       moveEvt.preventDefault();
@@ -69,10 +73,10 @@ var trackingPin = function(shift) {
       startCoords = {
         x: moveEvt.clientX
       };
-
+      // если мы двигали мышь, то срабатывает эта функция с shift
       trackingPin(shift);
     };
-
+    // когда отпускаем мышь, то отключаем отслеживание по клику
     var onMouseUp = function(upEvt) {
       upEvt.preventDefault();
       document.removeEventListener('mousemove', onMouseMove);
@@ -86,7 +90,11 @@ var trackingPin = function(shift) {
     document.addEventListener('mouseup', onMouseUp);
   };
 
+// применяем фильтры
+// для пропорций нам нужны позиция пина, максимальное значение, какой фильтр
+// и в каких значениях записывать данные
   var applyEffectVar = function (positionPin, max, filter, end) {
+    // при помощи пропорции вычисляем фильтр
     var effectVar = (positionPin * percentagesForProportion) / widthUploadEffectLevelLine;
     effectVar = (max * effectVar) / percentagesForProportion;
     // меняем фильтр
@@ -96,21 +104,30 @@ var trackingPin = function(shift) {
   // функция изменения фильтра
   // принимаем параметры
   var filterFunction = function(max, filter, end) {
+    // как только мы выбрали фильтр, то отключается отслеживание mousedown на обнуление
     uploadEffectLevel.removeEventListener('mousedown', filterFunctionNone);
-
+    // включается функция отслеживания клика на полосу применения фильтра
     uploadEffectLevel.addEventListener('mousedown', function(evt) {
-      positionPin = evt.clientX - 395;
+      evt.preventDefault();
+      // находим координату по x для полосы
+      var uploadEffectLevelLineX = uploadEffectLevelLine.getBoundingClientRect().x;
+      // определяем позицию пина
+      // из текущего положения клика вычитаем координату по x
+      positionPin = evt.clientX - uploadEffectLevelLineX;
+      // эта разница отправляется в функцию положения пина
       trackingPin(positionPin);
+      // эти же данные отправляются в функцию применения фильтра
       applyEffectVar(positionPin, max, filter, end);
     });
-
+    // при клике на фильтр значения становятся по дефолту на max
     uploadEffectLevelPin.style.left = maxLeft + 'px';
     uploadEffectLevelVal.style.width = maxLeft + 'px';
-
+    // создается отслеживание нажатого pin
     uploadEffectLevelPin.addEventListener('mousedown', onMouseDown);
-    // создаем событие по mousemove
+    // создаем событие по mousemove, что бы двигать вне pin
     document.addEventListener("mousemove", function() {
       // находим значение для фильтра
+      // если было движение, то dragged становится true
       if (dragged) {
         applyEffectVar(positionPin, max, filter, end);
       };
@@ -122,11 +139,6 @@ var trackingPin = function(shift) {
     uploadEffectLevelPin.style.left = minLeft + 'px';
     uploadEffectLevelVal.style.width = minLeft + 'px';
     effectImagePreview.style.filter = 'none';
-  };
-
-  var onMouseDownpositionPinNone = function() {
-    uploadEffectLevelPin.style.left = minLeft + 'px';
-    uploadEffectLevelVal.style.width = minLeft + 'px';
   };
 
   // запускаем функцию по изменению фильтров
@@ -177,7 +189,6 @@ var trackingPin = function(shift) {
       filterFunction(max, filter, end);
 
     } else {
-      effectImagePreview.style.filter = 'none';
       filterFunctionNone();
       uploadEffectLevelPin.removeEventListener('mousedown', onMouseDown);
       uploadEffectLevel.addEventListener('mousedown', filterFunctionNone);
