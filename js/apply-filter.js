@@ -8,6 +8,7 @@
     openPopup();
   });
 
+
   // ширина блока
   var widthUploadEffectLevelLine = 465;
   // стандартное число для пропорций
@@ -196,9 +197,26 @@ var trackingPin = function(shift) {
   };
 
   var inputEffect = uploadEffectControls.querySelectorAll('input');
-  // отлавливаем клик на любом изображении
+  // отлавливаем клик на любом фильтре
   for (var i = 0; i < inputEffect.length; i++) {
     inputEffect[i].addEventListener('click', uploadEffect);
   };
+
+
+  var form = document.querySelector('#upload-select-image');
+  var uploadEffectNone = uploadEffectControls.querySelector('#upload-effect-none');
+
+  form.addEventListener('submit', function(evt){
+    // при помощи formData(конструктор) берем данные и отправляем их
+    window.upload(new FormData(form), function(response){
+      // закрываем окно
+      closePopup();
+      // сбрасываем фильтры
+      filterFunctionNone();
+      // сбрасываем выбор radio
+      uploadEffectNone.checked = true;
+    });
+    evt.preventDefault();
+  });
 
 })();

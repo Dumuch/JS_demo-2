@@ -36,10 +36,8 @@
     var pictureIdIndex = pictureIdIndex.split("-")[1];
     // переменная, которая содержит массив комментарий для каждого изображения
     var comments2 = pictureElements[pictureIdIndex].comments;
-    console.log(comments2);
     // переменная, которая подсчитывает кол-во комментарий
     var len = comments2.length;
-
 
     // функция вывода коментария
     var galleryOverlayCommentsText = function(pictureElements, indexComment) {
@@ -95,10 +93,18 @@
     //   liList[i].remove();
     // };
   });
+};
 
+window.load(successHandler);
+
+var uploadOverlay = document.querySelector('.upload-overlay');
   var effectImagePreview = document.querySelector('.effect-image-preview');
-  var uploadOverlay = document.querySelector('.upload-overlay');
-  var uploadFormCancel = uploadOverlay.querySelector('.upload-form-cancel');
+  // var uploadFormCancel = uploadOverlay.querySelector('.upload-form-cancel');
+
+// uploadFormCancel.addEventListener('click', function() {
+//   closePopup();
+//   effectImagePreview.classList = 'effect-image-preview';
+// });
 
   window.closePopup = function() {
     uploadOverlay.classList.add('hidden');
@@ -107,22 +113,5 @@
   window.openPopup = function() {
     uploadOverlay.classList.remove('hidden');
   };
-
-  uploadFormCancel.addEventListener('click', function() {
-    closePopup();
-    effectImagePreview.classList = 'effect-image-preview';
-  });
-
-  var form = document.querySelector('#upload-select-image');
-  form.addEventListener('submit', function(evt){
-    // при помощи formData(конструктор) берем данные и отправляем их
-    window.upload(new FormData(form), function(response){
-      uploadOverlay.classList.add('hidden');
-    });
-    evt.preventDefault();
-  });
-
-};
-  window.load(successHandler);
 
 })();
