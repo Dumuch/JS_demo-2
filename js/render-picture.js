@@ -11,52 +11,6 @@
   // конкретное изображение
   var linkPicture = pictureTemplate.querySelector('.picture');
 
-
-  // массив объектов
-  // window.pictureElements = [{
-  //     url: 'foto-1.jpg',
-  //     likes: 100,
-  // comments: [
-    //   {
-    //     "avatar": "img/avatar-6.svg",
-    //     "message": "Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце-концов это просто непрофессионально.",
-    //     "name": "Степан"
-    //   },
-    //   {
-    //     "avatar": "img/avatar-1.svg",
-    //     "message": "Непонятен один момент: как так-то?!",
-    //     "name": "Николай"
-    //   }
-    // ],
-        //     description: 'Тестим новую камеру!'
-  //   },
-  //   {
-  //     url: 'foto-2.jpg',
-  //     likes: 150,
-  //     comments: ['Хорошо!', 'Плохо'],
-  //     description: 'Докатились!'
-  //   },
-  //   {
-  //     url: 'foto-3.jpg',
-  //     likes: 60,
-  //     comments: ['Хорошо!', 'Плохо', 'Отстой'],
-  //     description: 'Могло быть и лучше!'
-  //   },
-  //   {
-  //     url: 'foto-4.jpg',
-  //     likes: 10,
-  //     comments: ['Хорошо!', 'Да вы просто молодцы', 'Да вы просто молодцы', 'Да вы просто молодцы', 'Плохо'],
-  //     description: 'Немного красивых видов!'
-  //   },
-  //   {
-  //     url: 'foto-5.jpg',
-  //     likes: 123,
-  //     comments: ['Ужас как ужас', 'Хорошо!', 'Плохо'],
-  //     description: 'Мало кто поймет!'
-  //   }
-  // ];
-
-
   // функция клонирования изображений(шаблона)
   var renderPicture = function(pictureElements) {
     // клонируем наш шаблон
@@ -70,7 +24,6 @@
     // возвращаем глобальную переменную
     return pictureElement;
   };
-
 
   var successHandler = function(pictureElements){
   // создаем в памяти fragment
@@ -88,10 +41,4 @@
 };
 
   window.load(successHandler);
-
-
-
-//   // var testPicture = document.querySelectorAll('img');
-  // var testPicture = window.load();
-
 })();
