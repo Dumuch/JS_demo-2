@@ -25,7 +25,7 @@
     <label for="filter-random" class="filters-item">Случайные</label>
   </form>
 
-  <form class="upload-form" id="upload-select-image" method="post" action="https://echo.htmlacademy.ru" enctype="multipart/form-data" autocomplete="off">
+  <form class="upload-form" id="upload-select-image" method="post"  enctype="multipart/form-data" autocomplete="off">
     <div class="upload-image">
       <input type="file" id="upload-file" class="upload-input" name="filename" required>
       <label class="upload-file upload-control" for="upload-file"></label>
@@ -37,7 +37,7 @@
           <fieldset class="upload-resize-controls">
             <button type="button" class="upload-resize-control upload-resize-controls-button upload-resize-controls-button-dec">–
             </button>
-          <input type="text" class="upload-resize-control upload-resize-controls-value" value="55%" readonly title="Image Scale" name="scale" />
+          <input type="text" class="upload-resize-control upload-resize-controls-value" value="0%" readonly title="Image Scale" name="scale" />
             <button type="button" class="upload-resize-control upload-resize-controls-button upload-resize-controls-button-inc">+
             </button>
           </fieldset>
@@ -162,8 +162,10 @@
   <script src="js/backend.js"></script>
 
   <script src="js/render-picture.js"></script>
+  <script src="js/filters.js"></script>
   <script src="js/gallery-overlay-preview.js"></script>
   <script src="js/apply-filter.js"></script>
+  <script src="js/resize-controls.js"></script>
 
   <!-- <script src="js/move-effect-level-pin.js"></script> -->
 

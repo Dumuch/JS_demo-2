@@ -208,9 +208,9 @@ var trackingPin = function(shift) {
 
   form.addEventListener('submit', function(evt){
     // при помощи formData(конструктор) берем данные и отправляем их
+    // закрываем окно
+    closePopup();
     window.upload(new FormData(form), function(response){
-      // закрываем окно
-      closePopup();
       // сбрасываем фильтры
       filterFunctionNone();
       // сбрасываем выбор radio

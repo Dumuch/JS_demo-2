@@ -1,7 +1,8 @@
 'use strict';
 
 (function() {
-  var successHandler = function(pictureElements) {
+  window.galleryOverlayPreview = function(pictureElements, pictureId) {
+
 
     //  ---------------- показ полного изоражения с комментариями -----------
     // находим форму полного изображения
@@ -10,7 +11,16 @@
     var galleryOverlayCommentsList = galleryOverlay.querySelector('.gallery-overlay-comments-list');
     // шаблон вывода комментарий
     var socialCommentText1 = document.querySelector('#social__comment-template').content;
+    var uploadOverlay = document.querySelector('.upload-overlay');
+    var effectImagePreview = document.querySelector('.effect-image-preview');
 
+    window.closePopup = function() {
+      uploadOverlay.classList.add('hidden');
+    };
+
+    window.openPopup = function() {
+      uploadOverlay.classList.remove('hidden');
+    };
 
     // функция создания полного изображения
     var renderGalleryOverlay = function(pictureElements) {
@@ -20,11 +30,7 @@
       galleryOverlay.querySelector('.comments-count').textContent = pictureElements.comments.length;
     };
 
-    var uploadFormPreview = document.querySelector('.container');
-    // находим все изображения для отлова клика
-    // var pictureId = uploadFormPreview.querySelectorAll('.picture');
 
-    var pictureId = uploadFormPreview.querySelectorAll('.picture');
 
 
     // функция открытия полного изображения и вывода комментарий
@@ -66,10 +72,13 @@
 
       // вставляем комментарии в list
       galleryOverlayCommentsList.appendChild(fragmentOverlay);
-
       // запускаем функцию полного изображения по id
       renderGalleryOverlay(pictureElements[pictureIdIndex]);
     };
+
+
+    // находим все изображения для отлова клика
+    // var pictureId = uploadFormPreview.querySelectorAll('.picture');
 
     // отлавливаем клик на любом изображении
     for (var i = 0; i < pictureId.length; i++) {
@@ -86,19 +95,7 @@
         galleryOverlayCommentsList.removeChild(galleryOverlayCommentsList.firstChild);
       };
     });
-  };
 
-  window.load(successHandler);
-
-  var uploadOverlay = document.querySelector('.upload-overlay');
-  var effectImagePreview = document.querySelector('.effect-image-preview');
-
-  window.closePopup = function() {
-    uploadOverlay.classList.add('hidden');
-  };
-
-  window.openPopup = function() {
-    uploadOverlay.classList.remove('hidden');
-  };
+  }
 
 })();

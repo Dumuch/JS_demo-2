@@ -12,7 +12,6 @@
     // получаем данные в формате json
     xhr.responseType = 'json';
 
-
     // создаем обработчик на загрузку данных
     xhr.addEventListener('load', function() {
       // как только пошла загрузка, то вызываем функцию
@@ -28,6 +27,7 @@
     xhr.send();
   };
 
+
   window.upload = function(data, onLoad, onError) {
   // формируется запрос на сервер
   var xhr = new XMLHttpRequest();
@@ -40,7 +40,6 @@
     // как только пошла загрузка, то вызываем функцию
     if (xhr.status === 200) {
       onLoad(xhr.response);
-      console.log(xhr.response);
     } else {
       onError('Статус ответа: ' + xhr.status + '' + xhr.statusText);
     }
