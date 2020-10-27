@@ -34,7 +34,7 @@
 
 
     // функция открытия полного изображения и вывода комментарий
-    var topTop = function(evt) {
+    var openOverlayPreview = function(evt) {
       // открываем полное изображение
       galleryOverlay.classList.remove('hidden');
       // находим id открытого изображения
@@ -82,7 +82,7 @@
 
     // отлавливаем клик на любом изображении
     for (var i = 0; i < pictureId.length; i++) {
-      pictureId[i].addEventListener('click', topTop);
+      pictureId[i].addEventListener('click', openOverlayPreview);
     };
 
     //  зыкрываем окно полного изображения

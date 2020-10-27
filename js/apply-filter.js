@@ -2,10 +2,32 @@
 
 (function() {
   // ------------- применение фильтров --------------
-  var uploadFile = document.querySelector('#upload-file');
+  var uploadFile = document.querySelector('.upload-image input[type=file]');
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var effectImagePreview = document.querySelector('.effect-image-preview');
+
 // открываем окно настройки фильтров при загрузке изображений
   uploadFile.addEventListener('change', function() {
-    openPopup();
+    // нужна одна картинка
+    var file = uploadFile.files[0];
+    // проверяем картинку на расширение
+    var fileName = file.name.toLowerCase();
+    // some возращает true или false
+    var matches = FILE_TYPES.some(function(it){
+      return fileName.endsWith(it);
+    });
+
+    if (matches) {
+      // создаем объект при помощи конструктора
+      var reader = new FileReader();
+      // как только прочитаем картинку, то src картинки поменяется
+      reader.addEventListener('load', function(){
+        effectImagePreview.src = reader.result;
+      });
+      // читаем при помощи этого метода
+      reader.readAsDataURL(file);
+      openPopup();
+    }
   });
 
 
@@ -19,7 +41,6 @@
   var minLeft = 0;
 
   var uploadFormPreview = document.querySelector('.upload-form-preview');
-  var effectImagePreview = document.querySelector('.effect-image-preview');
 
   var uploadEffectControls = document.querySelector('.upload-effect-controls');
   var uploadEffectLevel = document.querySelector('.upload-effect-level');

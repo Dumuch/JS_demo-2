@@ -27,34 +27,26 @@
 
 
 window.renderPictureActive = function(pictureElements) {
-
+ // создаем в памяти fragment
   var fragment = document.createDocumentFragment();
+  // запускаем цикл
+  // цикл происходит столько раз, сколько объектов в массиве
   for (var i = 0; i < pictureElements.length; i++) {
+      // добавляем к каждому изображению id
     linkPicture.id = 'picture-' + i;
+      // в fragment вставляем шаблоны по порядку в конец
     fragment.appendChild(renderPicture(pictureElements[i]));
   };
+  // выводим в контейнере фрагменты по порядку
     uploadFormPreview.appendChild(fragment);
+
     var pictureId = uploadFormPreview.querySelectorAll('.picture');
     galleryOverlayPreview(pictureElements, pictureId);
 };
 
-
   // находим все изображения для отлова клика
   var successHandler = function(pictureElements) {
 
-    // // создаем в памяти fragment
-    // var fragment = document.createDocumentFragment();
-    // // запускаем цикл
-    // // цикл происходит столько раз, сколько объектов в массиве
-    // for (var i = 0; i < pictureElements.length; i++) {
-    //   // добавляем к каждому изображению id
-    //   linkPicture.id = 'picture-' + i;
-    //   // в fragment вставляем шаблоны по порядку в конец
-    //   fragment.appendChild(renderPicture(pictureElements[i]));
-    // };
-
-    // выводим в контейнере фрагменты по порядку
-    // uploadFormPreview.appendChild(fragment);
     filtersRecommend(pictureElements);
     renderPictureActive(pictureElements);
 
